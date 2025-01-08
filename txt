@@ -1,0 +1,30 @@
+import { useParams } from "react-router-dom";
+import UseFetch from "../Components/useFetch/useFetch";
+
+function RecipeDetailPage() {
+   const { id } = useParams(); // Get the recipe ID from the URL
+   const { data: foodData, loading, error } = UseFetch(`https://dummyjson.com/recipes/${id}`); // Fetch data using the ID
+
+   if (loading) return <h2>Loading...</h2>; // Show loading state while fetching data
+   if (error) return <h2>Error: {error.message}</h2>; // Handle error state
+
+   return (
+      <div>
+         {foodData ? ( // Check if foodData exists
+            <section key={foodData.id}>
+               <h1 className="text-2xl font-bold">{foodData.name}</h1>
+               <h2>Ingredients</h2>
+               <ul>
+                  {foodData.ingredients.map((ingredient, index) => ( // Assuming ingredients is an array
+                     <li key={index}>{ingredient}</li> // Display each ingredient
+                  ))}
+               </ul>
+            </section>
+         ) : (
+            <h2>No recipe found.</h2> // Handle case where no recipe is found
+         )}
+      </div>
+   );
+}
+
+export default RecipeDetailPage;
